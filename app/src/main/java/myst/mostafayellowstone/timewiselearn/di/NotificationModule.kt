@@ -12,6 +12,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ServiceScoped
 import myst.mostafayellowstone.timewiselearn.R
 import myst.mostafayellowstone.timewiselearn.util.Constant.NOTIFICATION_CHANNEL_ID
+import myst.mostafayellowstone.timewiselearn.viewLayer.session.ServiceHelper
 
 
 @Module
@@ -27,6 +28,7 @@ object NotificationModule {
             .setContentText("00:00:00")
             .setSmallIcon(R.drawable.session)
             .setOngoing(true)
+            .setContentIntent(ServiceHelper.clickPendingIntent(context))
     }
 
     @Provides

@@ -6,6 +6,7 @@ import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
@@ -29,6 +30,7 @@ import kotlin.time.Duration.Companion.seconds
 @AndroidEntryPoint
 class StudySessionTimerService: Service() {
     private lateinit var timer: Timer
+    private val binder = StudySessionTimerBinder()
     var duration: Duration = Duration.ZERO
         private set
     @Inject
@@ -45,7 +47,7 @@ class StudySessionTimerService: Service() {
     var currentTimeState = mutableStateOf(TimerState.IDLE)
         private set
 
-    override fun onBind(intent: Intent?): IBinder?  = null
+    override fun onBind(intent: Intent?)  = binder
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -129,12 +131,17 @@ class StudySessionTimerService: Service() {
     }
 
     fun updateTimeUnits(){
-        duration.toComponents { hours, minuts, seconds ->
+        duration.toComponents { hours, minuts, seconds, _->
         this@StudySessionTimerService.hours.value = hours.toInt().pad()
         this@StudySessionTimerService.minuts.value = minuts.pad()
         this@StudySessionTimerService.seconds.value = seconds.pad()
     }
 }
+
+    inner class StudySessionTimerBinder(): Binder(){
+        fun getService(): StudySessionTimerService = this@StudySessionTimerService
+    }
+
 enum class TimerState{
     IDLE,
     STARTED,
