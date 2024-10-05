@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import myst.mostafayellowstone.timewiselearn.R
 import myst.mostafayellowstone.timewiselearn.domin.model.Session
+import myst.mostafayellowstone.timewiselearn.util.changeMillisToDateString
+import myst.mostafayellowstone.timewiselearn.util.toHours
 
 fun LazyListScope.SessionList(
     sectionTitle: String,
@@ -94,12 +96,12 @@ private fun SessionCard(
                     style = MaterialTheme.typography.titleMedium,
                 )
                 Text(
-                    text = "${session.date}",
+                    text = session.date.changeMillisToDateString(),
                     style = MaterialTheme.typography.bodySmall
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
-                Text(text = "${session.duration} hour",
+                Text(text = "${session.duration.toHours()} hour",
                     style = MaterialTheme.typography.titleMedium)
 
                     IconButton(onClick = onDeleteIconClick) {

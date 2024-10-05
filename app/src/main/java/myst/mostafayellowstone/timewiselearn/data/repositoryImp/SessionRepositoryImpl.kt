@@ -1,6 +1,7 @@
 package myst.mostafayellowstone.timewiselearn.data.repositoryImp
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.take
 import myst.mostafayellowstone.timewiselearn.data.local.SessionDao
 import myst.mostafayellowstone.timewiselearn.domin.model.Session
@@ -19,15 +20,20 @@ class SessionRepositoryImpl @Inject constructor(
     }
 
     override fun getAllSession(): Flow<List<Session>> {
-        return sessionDao.getAllSessions()
+        return sessionDao.getAllSessions().map { sessions -> sessions.sortedByDescending { it.date } }
     }
 
     override fun getRecentFiveSession(): Flow<List<Session>> {
-        return sessionDao.getAllSessions().take(count = 5)
+        return sessionDao.getAllSessions()
+            .map { sessions -> sessions.sortedByDescending { it.date }}
+            .take(count = 5)
+
     }
 
     override fun getRecentTenSessionForSubject(subjectId: Int): Flow<List<Session>> {
-        return sessionDao.getRecentSessionForSubject(subjectId).take(count = 10)
+        return sessionDao.getRecentSessionForSubject(subjectId)
+            .map { sessions -> sessions.sortedByDescending { it.date }}
+            .take(count = 10)
     }
 
     override fun getTotalSessionDuration(): Flow<Long> {

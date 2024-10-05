@@ -69,10 +69,16 @@ class SubjectViewModel @Inject constructor(
 
     fun onEvent(event: SubjectEvent){
         when(event){
-            SubjectEvent.DeleteSession -> {}
+            SubjectEvent.DeleteSession -> deleteSession()
             SubjectEvent.DeleteSubject -> deleteSubject()
             SubjectEvent.UpdateSubject -> updateSubject()
-            is SubjectEvent.onDeleteSessionButtonClick -> {}
+            is SubjectEvent.onDeleteSessionButtonClick -> {
+                _state.update {
+                    it.copy(
+                       session = event.session
+                    )
+                }
+            }
             is SubjectEvent.onGoalStudyHoursChange -> {
                 _state.update {
                     it.copy(goalStudyHours = event.hours)
@@ -188,6 +194,26 @@ class SubjectViewModel @Inject constructor(
                 _snackBarEventFlow.emit(SnackBarEvent.showSnackBar(
                     "Invalid. ${e.message}" , SnackbarDuration.Long
                 ))
+            }
+        }
+    }
+    private fun deleteSession() {
+        viewModelScope.launch {
+            try {
+                state.value.session?.let {
+                    sessionRepository.deleteSession(it)
+                    _snackBarEventFlow.emit(
+                        SnackBarEvent.showSnackBar(
+                            "Session Deleted Successfully" , SnackbarDuration.Long
+                        ))
+                }
+            } catch (e: Exception) {
+                _snackBarEventFlow.emit(
+                    SnackBarEvent.showSnackBar(
+                        msg = "Invalid. ${e.message}",
+                        duration = SnackbarDuration.Long
+                    )
+                )
             }
         }
     }
