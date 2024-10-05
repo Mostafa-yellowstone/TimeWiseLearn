@@ -55,9 +55,6 @@ import myst.mostafayellowstone.timewiselearn.R
 import myst.mostafayellowstone.timewiselearn.domin.model.Session
 import myst.mostafayellowstone.timewiselearn.domin.model.Subject
 import myst.mostafayellowstone.timewiselearn.domin.model.Task
-import myst.mostafayellowstone.timewiselearn.sessions
-import myst.mostafayellowstone.timewiselearn.subjects
-import myst.mostafayellowstone.timewiselearn.tasks
 import myst.mostafayellowstone.timewiselearn.util.SnackBarEvent
 import myst.mostafayellowstone.timewiselearn.viewLayer.components.AddSubjectDialog
 import myst.mostafayellowstone.timewiselearn.viewLayer.components.CountCard

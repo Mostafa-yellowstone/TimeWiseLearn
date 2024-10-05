@@ -6,7 +6,7 @@ import myst.mostafayellowstone.timewiselearn.data.local.SubjectDao
 import myst.mostafayellowstone.timewiselearn.data.local.TaskDao
 import myst.mostafayellowstone.timewiselearn.domin.model.Subject
 import myst.mostafayellowstone.timewiselearn.domin.repository.SubjectRepository
-import myst.mostafayellowstone.timewiselearn.subjects
+
 import javax.inject.Inject
 
 class SubjectRepositoryImpl @Inject constructor(
