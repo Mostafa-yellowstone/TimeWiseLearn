@@ -70,7 +70,7 @@ class DashBoardViewModel @Inject constructor(
 
     fun onEvent(event: DashBoardEvent){
         when(event){
-            DashBoardEvent.DeleteSession -> TODO()
+            DashBoardEvent.DeleteSession -> {}
             DashBoardEvent.SaveSubject -> saveSubject()
             is DashBoardEvent.onDeleteSessionButtonClick ->   _state.update {
                 it.copy(session = event.session)
@@ -87,9 +87,30 @@ class DashBoardViewModel @Inject constructor(
                     it.copy(subjectName = event.name)
                 }
             }
-            is DashBoardEvent.onTaskIsCompleteChange -> TODO()
+            is DashBoardEvent.onTaskIsCompleteChange -> {
+                updateTask(event.task)
+            }
         }
     }
+
+    private fun updateTask(task : Task) {
+        viewModelScope.launch {
+            try {
+              taskRepository.upsertTask(
+                  task = task.copy(isComplete = !task.isComplete)
+              )
+                _snackBarEventFlow.emit(SnackBarEvent.showSnackBar(
+                    "Saved In Completed Tasks"
+                ))
+
+            }catch (e:Exception){
+                _snackBarEventFlow.emit(SnackBarEvent.showSnackBar(
+                    "Invalid. ${e.message}" , SnackbarDuration.Long
+            ))
+        }
+    }
+}
+
 
     private fun saveSubject() {
         viewModelScope.launch {

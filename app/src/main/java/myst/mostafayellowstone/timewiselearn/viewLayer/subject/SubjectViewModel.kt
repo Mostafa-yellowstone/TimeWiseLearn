@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import myst.mostafayellowstone.timewiselearn.domin.model.Subject
+import myst.mostafayellowstone.timewiselearn.domin.model.Task
 import myst.mostafayellowstone.timewiselearn.domin.repository.SessionRepository
 import myst.mostafayellowstone.timewiselearn.domin.repository.SubjectRepository
 import myst.mostafayellowstone.timewiselearn.domin.repository.TaskRepository
@@ -87,7 +88,7 @@ class SubjectViewModel @Inject constructor(
                     it.copy(subjectName = event.name)
                 }
             }
-            is SubjectEvent.onTaskCompleteChange -> {}
+            is SubjectEvent.onTaskCompleteChange -> {updateTask(event.task)}
             SubjectEvent.UpdateProgress -> {
                 val goalStudyHours = state.value.goalStudyHours.toFloatOrNull() ?: 1f
                 _state.update {
@@ -161,6 +162,32 @@ class SubjectViewModel @Inject constructor(
                     )
                 )
 
+            }
+        }
+    }
+    private fun updateTask(task : Task) {
+        viewModelScope.launch {
+            try {
+                taskRepository.upsertTask(
+                    task = task.copy(isComplete = !task.isComplete)
+                )
+                if (task.isComplete){
+                    _snackBarEventFlow.emit(
+                        SnackBarEvent.showSnackBar(
+                        msg = "Saved In Upcoming Tasks"
+                    ))
+                }else {
+                    _snackBarEventFlow.emit(
+                        SnackBarEvent.showSnackBar(
+                            msg = "Saved In Completed Tasks"
+                        )
+                    )
+                }
+
+            }catch (e:Exception){
+                _snackBarEventFlow.emit(SnackBarEvent.showSnackBar(
+                    "Invalid. ${e.message}" , SnackbarDuration.Long
+                ))
             }
         }
     }

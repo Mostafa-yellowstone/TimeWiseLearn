@@ -1,7 +1,8 @@
 package myst.mostafayellowstone.timewiselearn.viewLayer.task
 
+import myst.mostafayellowstone.timewiselearn.domin.model.Subject
 import myst.mostafayellowstone.timewiselearn.util.Priority
-import javax.security.auth.Subject
+
 
 data class TaskState(
     val title: String ="",

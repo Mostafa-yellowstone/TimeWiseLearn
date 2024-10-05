@@ -44,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.annotation.RootNavGraph
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -70,8 +71,8 @@ import myst.mostafayellowstone.timewiselearn.viewLayer.dashboard.DashBoardViewMo
 import myst.mostafayellowstone.timewiselearn.viewLayer.subject.SubjectScreenNavArgs
 import myst.mostafayellowstone.timewiselearn.viewLayer.task.TaskScreenNavArgs
 
-
-@Destination(start = true)
+@RootNavGraph(start = true)
+@Destination()
 @Composable
 fun DashBoardScreenRoute(
     navigator: DestinationsNavigator
@@ -80,6 +81,7 @@ fun DashBoardScreenRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val tasks by viewModel.tasks.collectAsStateWithLifecycle()
     val recentSessions by viewModel.recentSession.collectAsStateWithLifecycle()
+
     DashBoardScreen(
         state = state,
         onEvent = viewModel::onEvent,

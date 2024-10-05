@@ -1,10 +1,12 @@
 package myst.mostafayellowstone.timewiselearn
 
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.app.ActivityCompat
 
 import com.ramcosta.composedestinations.DestinationsNavHost
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,16 @@ class MainActivity : ComponentActivity() {
             TimeWiseLearnTheme {
                 DestinationsNavHost(navGraph= NavGraphs.root)
             }
+        }
+        requestPermission()
+    }
+    private fun requestPermission(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(android.Manifest.permission.POST_NOTIFICATIONS),
+                0
+            )
         }
     }
 }
@@ -154,4 +166,5 @@ val sessions = listOf(
 
 
     )
+
 

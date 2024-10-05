@@ -32,6 +32,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -40,6 +41,9 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.launch
 import myst.mostafayellowstone.timewiselearn.sessions
 import myst.mostafayellowstone.timewiselearn.subjects
+import myst.mostafayellowstone.timewiselearn.util.Constant.ACTION_SERVICE_DISMISS
+import myst.mostafayellowstone.timewiselearn.util.Constant.ACTION_SERVICE_START
+import myst.mostafayellowstone.timewiselearn.util.Constant.ACTION_SERVICE_STOP
 import myst.mostafayellowstone.timewiselearn.viewLayer.components.DeleteSubjectDialog
 import myst.mostafayellowstone.timewiselearn.viewLayer.components.SessionList
 import myst.mostafayellowstone.timewiselearn.viewLayer.components.SubjectListBottomSheet
@@ -56,6 +60,7 @@ fun SessionScreenRoute(navigator: DestinationsNavigator){
 @Composable
 private fun SessionScreen(onBackButtonClick: () -> Unit){
     val sheetState = rememberModalBottomSheetState()
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var isDeleteDialogOpen by remember { mutableStateOf(false) }
     var isBottomSheetOpen by remember { mutableStateOf(false) }
@@ -109,9 +114,22 @@ private fun SessionScreen(onBackButtonClick: () -> Unit){
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(12.dp),
-                    startButtonClick ={},
-                    dismissButtonClick = {},
-                    finishButtonClick = {}
+                    startButtonClick ={
+                        ServiceHelper.triggerForegroundService(
+                            context = context,
+                            action = ACTION_SERVICE_START,
+                        )
+                    },
+                    dismissButtonClick = {   ServiceHelper.triggerForegroundService(
+                        context = context,
+                        action = ACTION_SERVICE_DISMISS,
+                    )},
+                    finishButtonClick = {
+                        ServiceHelper.triggerForegroundService(
+                            context = context,
+                            action = ACTION_SERVICE_STOP,
+                        )
+                    }
                 )
             }
             SessionList(

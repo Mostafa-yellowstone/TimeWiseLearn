@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import myst.mostafayellowstone.timewiselearn.R
 import myst.mostafayellowstone.timewiselearn.domin.model.Task
 import myst.mostafayellowstone.timewiselearn.util.Priority
+import myst.mostafayellowstone.timewiselearn.util.changeMillisToDateString
 
 fun LazyListScope.taskList(
     sectionTitle: String,
@@ -100,7 +101,7 @@ private fun TaskCard(
                     }
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = "${task.dueDate}",
+                Text(text = task.dueDate.changeMillisToDateString(),
                     style = MaterialTheme.typography.bodySmall)
             }
         }
